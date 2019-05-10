@@ -1,0 +1,24 @@
+<html>
+<head>
+	<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+	<script>
+		"use strict";
+		$(document).ready(function() {
+			$.get('naj-classes', function(data, status) {
+				$.each(data, function(id, name) {
+					$('#naj-class-table tr:last').after(`<tr><td>${id}</td><td>${name}</td></tr>`);
+				});
+			});
+		});
+	</script>
+</head>
+<body>
+	<h1>Najan Word Classes</h1>
+	<table id='naj-class-table'>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+		</tr>
+	</table>
+</body>
+</html>

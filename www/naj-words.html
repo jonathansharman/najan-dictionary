@@ -1,0 +1,63 @@
+<html>
+<head>
+	<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+	<script>
+		"use strict";
+		function populate_word_class_list() {
+			$.get('naj-classes', function(word_classes, status) {
+				var word_class_dropdown_content = '';
+				$.each(word_classes, function(idx, value) {
+					word_class_dropdown_content += `<option value='${value}'>`;
+				});
+				$('#word-classes').html(word_class_dropdown_content);
+			});
+		}
+		function refresh_words_table() {
+			$.get('naj/(' + $('#regex').val() + ')', function(naj_words, status_text, xhr) {
+				if (xhr.status == 200) {
+					$('#word-table tbody').html('<tr></tr>');
+					$.each(naj_words, function(idx, value) {
+						var lemma = value['lemma'];
+						var word_class = value['word-class'];
+						var def = value['def'];
+						var lemma_input = `<input name='${lemma} lemma' value='${lemma}'`;
+						alert(lemma);
+						alert(word_class);
+						alert(def);
+						var word_class_input = `<input list='word-classes' name='${lemma} class' value='${word_class}'>`;
+						var def_input = `<input name-'${lemma} def' value='${def}'>`;
+						$('#word-table tbody tr:last').after(`<tr><td>${lemma_input}</td><td>${word_class_input}</td><td>${def_input}</td></tr>`);
+					});
+				} else {
+					console.log(naj_words);
+				}
+			});
+		}
+		$(document).ready(function() {
+			populate_word_class_list();
+			refresh_words_table();
+		});
+	</script>
+</head>
+<body>
+	<a href='/'>Back</a>
+
+	<h1>Najan Words</h1>
+
+	<label for='regex'>Regex search</label>
+	<input type='text' id='regex' value='.*' oninput='refresh_words_table()'>
+
+	<datalist id='word-classes'></datalist>
+	<table id='word-table'>
+		<thead>
+			<tr>
+				<th>Lemma</th>
+				<th>Word Class</th>
+				<th>Definition</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</body>
+</html>
